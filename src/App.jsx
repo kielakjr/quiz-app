@@ -2,6 +2,7 @@ import React from 'react'
 import questions from './data/questions'
 import Question from './components/Question.jsx'
 import Answer from './components/Answer.jsx'
+import ProgressBar from './components/ProgressBar.jsx'
 
 const App = () => {
 
@@ -11,6 +12,7 @@ const App = () => {
     <div id="quiz">
       <div id="question-overview">
         <div id="question">
+          <ProgressBar max={3000} />
           <Question
             key={question.id}
             question={question.text}
