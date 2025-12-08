@@ -1,33 +1,12 @@
 import React from 'react'
-import questions from './data/questions'
-import Question from './components/Question.jsx'
-import Answer from './components/Answer.jsx'
-import ProgressBar from './components/ProgressBar.jsx'
+import Quiz from './components/Quiz.jsx'
 
 const App = () => {
 
-  const question = questions[0];
-
   return (
-    <div id="quiz">
-      <div id="question-overview">
-        <div id="question">
-          <ProgressBar max={3000} />
-          <Question
-            key={question.id}
-            question={question.text}
-          />
-        </div>
-        <div id="answers">
-          {question.answers.map((answer, index) => (
-            <Answer
-              key={index}
-              text={answer}
-            />
-          ))}
-        </div>
-      </div>
-    </div>
+    <>
+      <Quiz />
+    </>
   )
 }
 

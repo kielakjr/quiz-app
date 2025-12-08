@@ -10,7 +10,7 @@ const ProgressBar = ({ max }) => {
       setProgress((prev) => prev - 10);
     }, 10);
     return () => clearInterval(interval);
-  }, []);
+  }, [max]);
 
   return (
     <progress value={progress} max={max}></progress>

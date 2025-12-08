@@ -1,9 +1,9 @@
 import React from 'react'
 
-const Answer = ({ text }) => {
+const Answer = ({ text, selected, onSelect }) => {
   return (
-    <div className="answer">
-      <button>{text}</button>
+    <div className="answer" onClick={() => onSelect(text)}>
+      <button className={selected ? 'selected' : ''}>{text}</button>
     </div>
   )
 }

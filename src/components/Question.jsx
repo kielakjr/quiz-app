@@ -1,9 +1,10 @@
 import React from 'react'
 
-const Question = ({ id, question, answers }) => {
+const Question = ({ text }) => {
+
   return (
     <div>
-      <h2>{question}</h2>
+      <h2>{text}</h2>
     </div>
   )
 }
