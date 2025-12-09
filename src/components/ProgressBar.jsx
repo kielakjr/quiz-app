@@ -3,14 +3,14 @@ import { useState } from 'react'
 
 const ProgressBar = ({ max }) => {
 
-  const [progress, setProgress] = useState(max);
+  const [progress, setProgress] = useState(max * 1000);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setProgress((prev) => prev - 10);
     }, 10);
     return () => clearInterval(interval);
-  }, [max]);
+  }, []);
 
   return (
     <progress value={progress} max={max}></progress>
