@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import Question from './Question.jsx'
 import Answer from './Answer.jsx'
 import ProgressBar from './ProgressBar.jsx'
@@ -19,21 +19,27 @@ const questionReducer = (state, action) => {
           text: QUESTIONS[nextIndex].text,
           answers: QUESTIONS[nextIndex].answers,
           id: QUESTIONS[nextIndex].id,
+          time: TIME_FOR_QUESTION,
+          selectedAnswer: null,
         };
       } else {
-        return state;
+        return {
+          ...state,
+          submitted: true,
+        };
       }
     case 'SELECT_ANSWER':
       return {
         ...state,
         selectedAnswer: action.payload,
+
       };
     default:
       return state;
   }
 }
 
-const Quiz = () => {
+const Quiz = ({ onAnswer, submitQuiz }) => {
 
   const [question, dispatchQuestion] = useReducer(questionReducer, {
     index: 0,
@@ -42,6 +48,7 @@ const Quiz = () => {
     id: QUESTIONS[0].id,
     selectedAnswer: null,
     time: TIME_FOR_QUESTION,
+    submitted: false,
   });
 
   useEffect(() => {
@@ -57,18 +64,22 @@ const Quiz = () => {
     dispatchQuestion({ type: 'SELECT_ANSWER', payload: answer });
   }
 
+  if (question.submitted) {
+    submitQuiz();
+  }
+
   return (
     <div id="quiz">
         <div id="question-overview">
           <div id="question">
-            <ProgressBar max={3} />
+            <ProgressBar max={question.time * 1000} key={question.index} answered={!!question.selectedAnswer} />
             <Question text={question.text} />
           </div>
-          <div id="answers">
+          <ul id="answers">
             {question.answers.map((answer, index) => (
               <Answer key={index} text={answer} onSelect={selectAnswer} selected={answer === question.selectedAnswer} />
             ))}
-          </div>
+          </ul>
         </div>
     </div>
   )
