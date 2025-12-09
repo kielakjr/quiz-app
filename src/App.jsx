@@ -1,10 +1,10 @@
 import React from 'react'
 import Quiz from './components/Quiz.jsx'
-import questionsData from './data/questions.js'
+import Summary from './components/Summary.jsx'
 
 const App = () => {
 
-  const [givenAnswers, setGivenAnswers] = React.useState(questionsData.map((question) => ({ id: question.id, answer: null })))
+  const [givenAnswers, setGivenAnswers] = React.useState([])
   const [quizSubmitted, setQuizSubmitted] = React.useState(false)
 
   const handleAnswer = (answer) => {
@@ -15,12 +15,10 @@ const App = () => {
     setQuizSubmitted(true)
   }
 
-  console.log(givenAnswers)
-
   return (
     <>
       {quizSubmitted ? (
-        <h2>Quiz Submitted!</h2>
+        <Summary givenAnswers={givenAnswers} />
       ) : (
         <Quiz onAnswer={handleAnswer} submitQuiz={submitQuiz} />
       )}

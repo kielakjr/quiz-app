@@ -25,7 +25,7 @@ const questionReducer = (state, action) => {
       } else {
         return {
           ...state,
-          submitted: true,
+          last: true,
         };
       }
     case 'SELECT_ANSWER':
@@ -48,11 +48,14 @@ const Quiz = ({ onAnswer, submitQuiz }) => {
     id: QUESTIONS[0].id,
     selectedAnswer: null,
     time: TIME_FOR_QUESTION,
-    submitted: false,
+    last: false,
   });
 
   useEffect(() => {
     const timer = setTimeout(() => {
+      if (!question.selectedAnswer) {
+        onAnswer({ id: question.id, answer: null });
+      }
       dispatchQuestion({ type: 'NEXT_QUESTION' });
 
     }, TIME_FOR_QUESTION * 1000);
@@ -61,12 +64,26 @@ const Quiz = ({ onAnswer, submitQuiz }) => {
   }, [question.index]);
 
   const selectAnswer = (answer) => {
-    dispatchQuestion({ type: 'SELECT_ANSWER', payload: answer });
+    dispatchQuestion({ type: 'SELECT_ANSWER', payload: answer })
+    onAnswer({ id: question.id, answer: answer });
   }
 
-  if (question.submitted) {
-    submitQuiz();
-  }
+  useEffect(() => {
+    if (question.last) {
+      submitQuiz();
+    }
+  }, [question.last, submitQuiz]);
+
+  useEffect(() => {
+    if (question.selectedAnswer) {
+
+      const timer = setTimeout(() => {
+        dispatchQuestion({ type: 'NEXT_QUESTION' });
+      }, 500);
+
+      return () => clearTimeout(timer);
+    }
+  }, [question.selectedAnswer]);
 
   return (
     <div id="quiz">
