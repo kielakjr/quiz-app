@@ -8,6 +8,13 @@ import questionsData from '../data/questions.js'
 const QUESTIONS = questionsData;
 const TIME_FOR_QUESTION = 3;
 
+const shuffleArray = (array) => {
+  return array
+    .map(value => ({ value, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ value }) => value);
+}
+
 const questionReducer = (state, action) => {
   switch (action.type) {
     case 'NEXT_QUESTION':
@@ -17,9 +24,10 @@ const questionReducer = (state, action) => {
           ...state,
           index: nextIndex,
           text: QUESTIONS[nextIndex].text,
-          answers: QUESTIONS[nextIndex].answers,
+          answers: shuffleArray(QUESTIONS[nextIndex].answers),
           id: QUESTIONS[nextIndex].id,
           time: TIME_FOR_QUESTION,
+          correct: QUESTIONS[nextIndex].answers[0],
           selectedAnswer: null,
         };
       } else {
@@ -44,10 +52,11 @@ const Quiz = ({ onAnswer, submitQuiz }) => {
   const [question, dispatchQuestion] = useReducer(questionReducer, {
     index: 0,
     text: QUESTIONS[0].text,
-    answers: QUESTIONS[0].answers,
+    answers: shuffleArray(QUESTIONS[0].answers),
     id: QUESTIONS[0].id,
     selectedAnswer: null,
     time: TIME_FOR_QUESTION,
+    correct: QUESTIONS[0].answers[0],
     last: false,
   });
 
@@ -65,7 +74,7 @@ const Quiz = ({ onAnswer, submitQuiz }) => {
 
   const selectAnswer = (answer) => {
     dispatchQuestion({ type: 'SELECT_ANSWER', payload: answer })
-    onAnswer({ id: question.id, answer: answer });
+    onAnswer({ id: question.id, answer: answer, text: question.text, correct: question.correct === answer });
   }
 
   useEffect(() => {
@@ -94,7 +103,7 @@ const Quiz = ({ onAnswer, submitQuiz }) => {
           </div>
           <ul id="answers">
             {question.answers.map((answer, index) => (
-              <Answer key={index} text={answer} onSelect={selectAnswer} selected={answer === question.selectedAnswer} />
+              <Answer key={`${index}-${answer}`} text={answer} onSelect={selectAnswer} selected={answer === question.selectedAnswer} />
             ))}
           </ul>
         </div>
