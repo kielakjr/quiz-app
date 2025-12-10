@@ -8,6 +8,7 @@ import questionsData from '../data/questions.js'
 const QUESTIONS = questionsData;
 const TIME_FOR_QUESTION = 5;
 const TIME_AFTER_ANSWER = 0.8;
+const TIME_TO_SHOW_CORRECT_ANSWER = 2;
 
 const shuffleArray = (array) => {
   return array
@@ -30,6 +31,7 @@ const questionReducer = (state, action) => {
           time: TIME_FOR_QUESTION,
           correct: QUESTIONS[nextIndex].answers[0],
           selectedAnswer: null,
+          showCorrect: false,
         };
       } else {
         return {
@@ -48,6 +50,11 @@ const questionReducer = (state, action) => {
         ...state,
         time: action.payload,
       };
+    case 'SHOW_CORRECT':
+      return {
+        ...state,
+        showCorrect: true,
+      };
     default:
       return state;
   }
@@ -64,6 +71,7 @@ const Quiz = ({ onAnswer, submitQuiz }) => {
     time: TIME_FOR_QUESTION,
     correct: QUESTIONS[0].answers[0],
     last: false,
+    showCorrect: false,
   });
 
   useEffect(() => {
@@ -91,9 +99,14 @@ const Quiz = ({ onAnswer, submitQuiz }) => {
 
   useEffect(() => {
     if (question.selectedAnswer) {
-      dispatchQuestion({ type: 'SET_TIME', payload: TIME_AFTER_ANSWER });
+      dispatchQuestion({ type: 'SET_TIME', payload: TIME_AFTER_ANSWER});
       const timer = setTimeout(() => {
-        dispatchQuestion({ type: 'NEXT_QUESTION' });
+        dispatchQuestion({ type: 'SHOW_CORRECT' });
+        dispatchQuestion({ type: 'SET_TIME', payload: TIME_TO_SHOW_CORRECT_ANSWER});
+        const correctTimer = setTimeout(() => {
+          dispatchQuestion({ type: 'NEXT_QUESTION' });
+        }, TIME_TO_SHOW_CORRECT_ANSWER * 1000);
+        return () => clearTimeout(correctTimer);
       }, TIME_AFTER_ANSWER * 1000);
       return () => clearTimeout(timer);
     }
@@ -103,12 +116,12 @@ const Quiz = ({ onAnswer, submitQuiz }) => {
     <div id="quiz">
         <div id="question-overview">
           <div id="question">
-            <ProgressBar max={question.time * 1000} key={question.index} answered={!!question.selectedAnswer} />
+            <ProgressBar max={question.time * 1000} key={question.index} answered={!!question.selectedAnswer && !question.showCorrect} />
             <Question text={question.text} />
           </div>
           <ul id="answers">
             {question.answers.map((answer, index) => (
-              <Answer key={`${index}-${answer}`} text={answer} onSelect={selectAnswer} selected={answer === question.selectedAnswer} />
+              <Answer key={`${index}-${answer}`} text={answer} onSelect={selectAnswer} selected={answer === question.selectedAnswer} showCorrect={question.showCorrect} isCorrect={answer === question.correct} />
             ))}
           </ul>
         </div>
