@@ -21,7 +21,7 @@ ReactQuiz is a simple and interactive quiz application built with React. The app
    npm run dev
    ```
 
-3. **Open your browser:**  
+3. **Open your browser:**
    Visit [http://localhost:5173](http://localhost:5173) (or the port shown in your terminal).
 
 ## Project Structure
@@ -36,5 +36,5 @@ ReactQuiz is a simple and interactive quiz application built with React. The app
 This project was created as part of a React course to practice component-based development, state management, and user interaction in React.
 
 ---
-**Note:**  
+**Note:**
 All questions and logic are for demonstration and educational purposes.
