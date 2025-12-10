@@ -1,8 +1,11 @@
 import React from 'react'
+import quizCompleteLogo from '../assets/quiz-complete.png'
 
 const Summary = ({ givenAnswers }) => {
   return (
     <div id="summary">
+      <img src={quizCompleteLogo} alt="Quiz Complete" />
+      <h2>Quiz Completed!</h2>
       <ol>
         {givenAnswers.map(answer => (
           <>

@@ -1,4 +1,3 @@
-import React, { useEffect } from 'react'
 import { useRef } from 'react'
 
 const Answer = ({ text, selected, onSelect }) => {
