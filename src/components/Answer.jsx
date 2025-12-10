@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 
-const Answer = ({ text, selected, onSelect, showCorrect, isCorrect }) => {
+const Answer = ({ text, selected, onSelect, showCorrect, isCorrect, disabled }) => {
 
   const buttonRef = useRef();
 
@@ -21,7 +21,7 @@ const Answer = ({ text, selected, onSelect, showCorrect, isCorrect }) => {
 
   return (
     <li className="answer" onClick={() => onSelect(text)}>
-      <button ref={buttonRef} className={applyClasses()}>{text}</button>
+      <button ref={buttonRef} className={applyClasses()} disabled={disabled}>{text}</button>
     </li>
   )
 }

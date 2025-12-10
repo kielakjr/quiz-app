@@ -8,7 +8,7 @@ import questionsData from '../data/questions.js'
 const QUESTIONS = questionsData;
 const TIME_FOR_QUESTION = 5;
 const TIME_AFTER_ANSWER = 0.8;
-const TIME_TO_SHOW_CORRECT_ANSWER = 2;
+const TIME_TO_SHOW_CORRECT_ANSWER = 1.5;
 
 const shuffleArray = (array) => {
   return array
@@ -121,7 +121,7 @@ const Quiz = ({ onAnswer, submitQuiz }) => {
           </div>
           <ul id="answers">
             {question.answers.map((answer, index) => (
-              <Answer key={`${index}-${answer}`} text={answer} onSelect={selectAnswer} selected={answer === question.selectedAnswer} showCorrect={question.showCorrect} isCorrect={answer === question.correct} />
+              <Answer key={`${index}-${answer}`} text={answer} onSelect={selectAnswer} selected={answer === question.selectedAnswer} showCorrect={question.showCorrect} isCorrect={answer === question.correct} disabled={!!question.selectedAnswer} />
             ))}
           </ul>
         </div>
